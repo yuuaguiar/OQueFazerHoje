@@ -1,0 +1,28 @@
+{% extends 'gestao/base.html' %}
+{% block title %}Entrar - O Que Fazer Hoje.{% endblock %}
+
+{% block content %}
+<main>
+    <div class="auth-container">
+        <h2>Entrar</h2>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username" class="form-label">Usuário</label>
+                <input type="text" name="username" id="id_username" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password" class="form-label">Senha</label>
+                <input type="password" name="password" id="id_password" class="form-input" required>
+            </div>
+            {% if form.errors %}
+            <div class="form-group">
+                <p style="color: hsl(var(--destructive));">Seu usuário ou senha estão incorretos.</p>
+            </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+        <p class="auth-link">Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+    </div>
+</main>
+{% endblock %}

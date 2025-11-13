@@ -1,0 +1,77 @@
+{% extends 'gestao/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - O Que Fazer Hoje.{% endblock %}
+
+{% block content %}
+<main>
+    {% if not user.is_authenticated %}
+        <div class="card" style="text-align: center;">
+            <h2 class="tasks-title">Bem-vindo(a)!</h2>
+            <p>Faça login ou crie uma conta para organizar suas tarefas diárias.</p>
+        </div>
+    {% elif all_completed %}
+        <div class="completion-message">
+            <i data-lucide="sparkles" class="icon"></i>
+            <h3 class="completion-message-title">Tudo limpo por hoje! ✨</h3>
+            <p class="completion-message-text">
+                Parabéns! Você completou todas as tarefas de hoje.
+            </p>
+        </div>
+    {% else %}
+        <div class="card gamification-grid">
+            <div class="progress-bar-area">
+                <h3 class="progress-bar-title">Seu Progresso de Hoje</h3>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="width: {{ progresso_percentual }}%;"></div>
+                </div>
+                <p class="progress-bar-label">
+                    {{ tarefas_concluidas_count }} de {{ tarefas_hoje_count }} tarefas concluídas
+                </p>
+            </div>
+            
+            <div class="streak-display">
+                <h3 class="streak-title">Sequência</h3>
+                <div class="streak-value">
+                    <i data-lucide="flame" class="icon"></i>
+                    <span>{{ perfil.streak_atual }}</span>
+                </div>
+                <p class="streak-label">dias</p>
+            </div>
+        </div>
+
+        <section class="tasks-section">
+            <h2 class="tasks-title">O Que Fazer Hoje</h2>
+            
+            <div class="tasks-grid">
+                {% for task in tarefas_hoje %}
+                    <form action="{% url 'concluir_tarefa' task.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="task-card" data-completed="{{ task.is_completed_today|yesno:'true,false' }}">
+                            <div class="task-card-content">
+                                <div>
+                                    <h3 class="task-card-title">{{ task.titulo }}</h3>
+                                    <p class="task-card-room">Cômodo: {{ task.comodo.nome }}</p>
+                                </div>
+                                
+                                {% if task.is_completed_today %}
+                                    <i data-lucide="check" class="task-card-icon"></i>
+                                {% endif %}
+                            </div>
+                        </button>
+                    </form>
+                {% empty %}
+                    <p>Nenhuma tarefa pendente para hoje. Aproveite o dia!</p>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    <div class="ad-block">
+        <p class="ad-block-label">Publicidade</p>
+        <div class="ad-block-box">
+            <p>Espaço para anúncio</p>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,420 @@
+/* ---------------------------------- */
+/* 1. VARIÁVEIS DE COR (do seu index.css) */
+/* ---------------------------------- */
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 160 84% 39%; /* Seu verde-azulado */
+  --primary-foreground: 0 0% 100%;
+  --primary-light: 158 64% 80%;
+  --accent: 38 92% 60%; /* Seu laranja/amarelo */
+  --accent-foreground: 222 47% 11%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 160 84% 39%;
+  --radius: 0.75rem;
+}
+
+/* ---------------------------------- */
+/* 2. ESTILOS GLOBAIS (Base) */
+/* ---------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-color: hsl(var(--border));
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  line-height: 1.5;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------- */
+/* 3. COMPONENTES (Tradução do shadcn/ui) */
+/* ---------------------------------- */
+
+/* Header (do Header.tsx) */
+.header {
+  border-bottom: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  padding: 1rem;
+}
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(var(--primary));
+}
+
+/* Botão (do button.tsx) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+.btn-primary:hover {
+  opacity: 0.9;
+}
+.btn-outline {
+  border-color: hsl(var(--input));
+  background-color: hsl(var(--background));
+}
+.btn-outline:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.btn-destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+.btn-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+}
+
+/* Input & Select (do input.tsx / select.tsx) */
+.form-input,
+.form-select {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+.form-input:focus,
+.form-select:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Card (do card.tsx) */
+.card {
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Gamification (do ProgressBar.tsx / StreakDisplay.tsx) */
+.gamification-grid {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.progress-bar-area {
+  flex: 1;
+}
+.progress-bar-title,
+.streak-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.progress-bar-track {
+  position: relative;
+  height: 0.75rem;
+  background-color: hsl(var(--muted));
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: hsl(var(--accent));
+  transition: width 0.5s ease-out;
+}
+.progress-bar-label {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.5rem;
+}
+.streak-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2rem;
+  border-left: 1px solid hsl(var(--border));
+}
+.streak-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+.streak-value .icon {
+  width: 2rem;
+  height: 2rem;
+  color: #f97316; /* Laranja do "fogo" */
+}
+.streak-label {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+}
+
+/* Task List (do Index.tsx) */
+.tasks-section {
+  margin-top: 2rem;
+}
+.tasks-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  margin-bottom: 1.5rem;
+}
+.tasks-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* Task Card (do TaskCard.tsx) */
+.task-card {
+  width: 100%;
+  text-align: left;
+  display: block;
+  border-radius: var(--radius);
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.task-card:hover {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.task-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.task-card-title {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+.task-card-room {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 2px;
+}
+.task-card-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: hsl(var(--primary-foreground));
+  margin-left: 0.75rem;
+}
+
+/* Estado Concluído */
+.task-card[data-completed="true"] {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+.task-card[data-completed="true"] .task-card-title,
+.task-card[data-completed="true"] .task-card-room {
+  color: hsl(var(--primary-foreground));
+  opacity: 0.9;
+}
+.task-card[data-completed="true"] .task-card-title {
+  text-decoration: line-through;
+}
+
+/* Ad Block (do AdBlock.tsx) */
+.ad-block {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+.ad-block-label {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.ad-block-box {
+  border: 2px dashed hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsla(var(--muted), 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 8rem;
+}
+.ad-block-box p {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Mensagem de Conclusão (do CompletionMessage.tsx) */
+.completion-message {
+  border: 1px solid hsl(var(--primary));
+  background-color: hsla(var(--primary), 0.1);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  max-width: 400px;
+  margin: 4rem auto;
+}
+.completion-message .icon {
+  width: 3rem;
+  height: 3rem;
+  color: hsl(var(--primary));
+  margin: 0 auto 0.75rem;
+}
+.completion-message-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: hsl(var(--primary));
+  margin-bottom: 0.5rem;
+}
+.completion-message-text {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Página de Configurações */
+.config-grid {
+  display: grid;
+  gap: 2rem;
+}
+.config-card {
+  background-color: hsl(var(--card));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid hsl(var(--border));
+}
+.config-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.config-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.config-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.config-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsla(var(--muted), 0.5);
+  margin-bottom: 0.5rem;
+}
+.config-list-item span {
+  font-size: 0.875rem;
+}
+.config-list-item .btn-icon {
+  color: hsl(var(--destructive));
+  height: 2rem;
+  width: 2rem;
+}
+.config-list-item .btn-icon:hover {
+  background-color: hsla(var(--destructive), 0.1);
+}
+
+/* Telas de Login / Cadastro */
+.auth-container {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+.auth-container h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.auth-form .form-group {
+  margin-bottom: 1rem;
+}
+.auth-form .form-group p {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+.auth-form .form-group ul {
+  list-style-type: none;
+  font-size: 0.875rem;
+  color: hsl(var(--destructive));
+  padding-left: 0.5rem;
+}
+.auth-form .btn {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1.5rem;
+}
+.auth-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+}
