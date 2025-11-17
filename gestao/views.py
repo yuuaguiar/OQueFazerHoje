@@ -51,6 +51,7 @@ def dashboard_view(request):
         'tarefas_concluidas_count': tarefas_concluidas_count,
         'all_completed': all_completed,
         'progresso_percentual': progresso_percentual,
+        'comodos': comodos,
     }
     return render(request, 'gestao/dashboard.html', context)
 

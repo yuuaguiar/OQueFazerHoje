@@ -418,3 +418,122 @@ a:hover {
   margin-top: 1.5rem;
   font-size: 0.875rem;
 }
+
+/* ---------------------------------- */
+/* 4. ESTILOS DE DROPDOWN E MODAL     */
+/* ---------------------------------- */
+
+/* Classe utilitária para esconder */
+.hidden {
+  display: none;
+}
+
+/* Dropdown Menu (para + e ⚙️) */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  width: 200px;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 50;
+  padding: 0.5rem;
+}
+.dropdown-header {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+.dropdown-item:hover {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  text-decoration: none;
+}
+.dropdown-item .icon {
+  width: 1rem;
+  height: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+.dropdown-separator {
+  height: 1px;
+  background-color: hsl(var(--border));
+  margin: 0.5rem -0.5rem;
+}
+.dropdown-user-info {
+  padding: 0.25rem 0.75rem;
+}
+.dropdown-user-info p {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.dropdown-user-info span {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+
+/* Modal (para Adicionar Tarefa/Cômodo) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex; /* Começa como 'flex' para ser mostrado */
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+.modal-content {
+  background-color: hsl(var(--card));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  position: relative;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--muted-foreground));
+}
+.modal-close-btn:hover {
+  color: hsl(var(--foreground));
+}
+.modal-body {
+  display: grid;
+  gap: 1rem;
+}
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}

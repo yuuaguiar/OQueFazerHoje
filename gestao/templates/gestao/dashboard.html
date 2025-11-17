@@ -75,3 +75,68 @@
     </div>
 </main>
 {% endblock %}
+
+<div id="modal-add-comodo" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Adicionar Novo Cômodo</h3>
+            <button class="modal-close-btn" data-dismiss="modal">
+                <i data-lucide="x" class="icon"></i>
+            </button>
+        </div>
+        
+        <form action="{% url 'add_comodo' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div>
+                    <label for="id_nome_comodo" class="form-label">Nome do Cômodo</label>
+                    <input type="text" name="nome" id="id_nome_comodo" placeholder="Ex: Cozinha, Quarto..." class="form-input" required>
+                    <input type="hidden" name="icone" value="default.png">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Adicionar Cômodo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-add-tarefa" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Adicionar Nova Tarefa</h3>
+            <button class="modal-close-btn" data-dismiss="modal">
+                <i data-lucide="x" class="icon"></i>
+            </button>
+        </div>
+        
+        <form action="{% url 'add_tarefa' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div>
+                    <label for="id_titulo_tarefa" class="form-label">Nome da Tarefa</label>
+                    <input type="text" name="titulo" id="id_titulo_tarefa" placeholder="Ex: Lavar a louça" class="form-input" required>
+                </div>
+                <div class="config-form-grid">
+                    <div>
+                        <label for="id_comodo_tarefa" class="form-label">Cômodo</label>
+                        <select name="comodo_id" id="id_comodo_tarefa" class="form-select" required>
+                            {% for comodo in comodos %}
+                            <option value="{{ comodo.id }}">{{ comodo.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="id_intervalo_tarefa" class="form-label">Frequência (dias)</label>
+                        <input type="number" name="intervalo_dias" value="1" min="1" id="id_intervalo_tarefa" class="form-input" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Adicionar Tarefa</button>
+            </div>
+        </form>
+    </div>
+</div>

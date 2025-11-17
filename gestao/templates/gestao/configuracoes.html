@@ -1,13 +1,12 @@
 {% extends 'gestao/base.html' %}
 {% load static %}
 
-{% block title %}Configurações - O Que Fazer Hoje.{% endblock %}
-
-{% block content %}
+{% block title %}Gerenciar - O Que Fazer Hoje.{% endblock %} {% block content %}
 <main class="config-grid">
     
     <div class="config-card">
-        <h2 class="config-card-title">Gerenciar Cômodos</h2>
+        <h2 class="config-card-title">Gerenciar Cômodos</h2> 
+    </div>
         
         <form action="{% url 'add_comodo' %}" method="POST" class="config-form">
             {% csrf_token %}

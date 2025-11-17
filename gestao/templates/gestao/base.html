@@ -18,12 +18,49 @@
             
             <div style="display: flex; align-items: center; gap: 0.5rem;">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'configuracoes' %}" class="btn btn-icon btn-outline" aria-label="Configurações">
-                        <i data-lucide="settings" class="icon"></i>
-                    </a>
-                    <a href="{% url 'logout' %}" class="btn btn-outline" aria-label="Sair">
-                        Sair
-                    </a>
+                    
+                    <div style="position: relative;">
+                        <button class="btn btn-icon btn-primary" data-toggle="dropdown" data-target="dropdown-add">
+                            <i data-lucide="plus" class="icon"></i>
+                        </button>
+                        <div id="dropdown-add" class="dropdown-menu hidden">
+                            <button class="dropdown-item" data-toggle="modal" data-target="modal-add-comodo">
+                                <i data-lucide="home" class="icon"></i>
+                                <span>Adicionar Cômodo</span>
+                            </button>
+                            <button class="dropdown-item" data-toggle="modal" data-target="modal-add-tarefa">
+                                <i data-lucide="check-square" class="icon"></i>
+                                <span>Adicionar Tarefa</span>
+                            </button>
+                            <div class="dropdown-separator"></div>
+                            <a href="{% url 'configuracoes' %}" class="dropdown-item">
+                                <i data-lucide="pencil" class="icon"></i>
+                                <span>Gerenciar Tarefas</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="position: relative;">
+                        <button class="btn btn-icon btn-outline" data-toggle="dropdown" data-target="dropdown-settings">
+                            <i data-lucide="settings" class="icon"></i>
+                        </button>
+                        <div id="dropdown-settings" class="dropdown-menu hidden">
+                            <div class="dropdown-header">Configurações</div>
+                            <div class="dropdown-user-info">
+                                <p>{{ user.username }}</p>
+                                <span>{{ user.email|default:"Sem e-mail" }}</span>
+                            </div>
+                            <div class="dropdown-separator"></div>
+                            <button class="dropdown-item" disabled> <i data-lucide="moon" class="icon"></i>
+                                <span>Tema Escuro</span>
+                            </button>
+                            <a href="{% url 'logout' %}" class="dropdown-item">
+                                <i data-lucide="log-out" class="icon"></i>
+                                <span>Sair</span>
+                            </a>
+                        </div>
+                    </div>
+
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-outline">Entrar</a>
                     <a href="{% url 'cadastro' %}" class="btn btn-primary">Cadastrar</a>
@@ -31,6 +68,7 @@
             </div>
         </div>
     </header>
+
 
     {% block content %}
     {% endblock %}
