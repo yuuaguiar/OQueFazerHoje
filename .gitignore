@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Banco de dados (opcional, se quiser salvar o banco no git, remova esta linha)
+db.sqlite3
+
+# Ambiente Virtual
+.env/
+venv/
+env/

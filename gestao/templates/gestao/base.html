@@ -1,69 +1,74 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br" class="light">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}O Que Fazer Hoje.{% endblock %}</title>
-    
+
     <link rel="stylesheet" href="{% static 'gestao/css/main.css' %}" />
-    
+
     <script src="https://unpkg.com/lucide-react@0.395.0/dist/umd/lucide.min.js"></script>
 </head>
+
 <body class="bg-background">
 
     <header class="header">
         <div class="header-content">
             <a href="{% url 'dashboard' %}" class="header-title">O Que Fazer Hoje.</a>
-            
+
             <div style="display: flex; align-items: center; gap: 0.5rem;">
                 {% if user.is_authenticated %}
-                    
-                    <div style="position: relative;">
-                        <button class="btn btn-icon btn-primary" data-toggle="dropdown" data-target="dropdown-add">
-                            <i data-lucide="plus" class="icon"></i>
-                        </button>
-                        <div id="dropdown-add" class="dropdown-menu hidden">
-                            <button class="dropdown-item" data-toggle="modal" data-target="modal-add-comodo">
-                                <i data-lucide="home" class="icon"></i>
-                                <span>Adicionar Cômodo</span>
-                            </button>
-                            <button class="dropdown-item" data-toggle="modal" data-target="modal-add-tarefa">
-                                <i data-lucide="check-square" class="icon"></i>
-                                <span>Adicionar Tarefa</span>
-                            </button>
-                            <div class="dropdown-separator"></div>
-                            <a href="{% url 'configuracoes' %}" class="dropdown-item">
-                                <i data-lucide="pencil" class="icon"></i>
-                                <span>Gerenciar Tarefas</span>
-                            </a>
-                        </div>
-                    </div>
 
-                    <div style="position: relative;">
-                        <button class="btn btn-icon btn-outline" data-toggle="dropdown" data-target="dropdown-settings">
-                            <i data-lucide="settings" class="icon"></i>
+                <div style="position: relative;">
+                    <button class="btn btn-icon btn-primary" data-toggle="dropdown" data-target="dropdown-add">
+                        <i data-lucide="plus" class="icon"></i>
+                    </button>
+                    <div id="dropdown-add" class="dropdown-menu hidden">
+                        <button class="dropdown-item" data-toggle="modal" data-target="modal-add-comodo">
+                            <i data-lucide="home" class="icon"></i>
+                            <span>Adicionar Cômodo</span>
                         </button>
-                        <div id="dropdown-settings" class="dropdown-menu hidden">
-                            <div class="dropdown-header">Configurações</div>
-                            <div class="dropdown-user-info">
-                                <p>{{ user.username }}</p>
-                                <span>{{ user.email|default:"Sem e-mail" }}</span>
-                            </div>
-                            <div class="dropdown-separator"></div>
-                            <button class="dropdown-item" disabled> <i data-lucide="moon" class="icon"></i>
-                                <span>Tema Escuro</span>
-                            </button>
-                            <a href="{% url 'logout' %}" class="dropdown-item">
+                        <button class="dropdown-item" data-toggle="modal" data-target="modal-add-tarefa">
+                            <i data-lucide="check-square" class="icon"></i>
+                            <span>Adicionar Tarefa</span>
+                        </button>
+                        <div class="dropdown-separator"></div>
+                        <a href="{% url 'configuracoes' %}" class="dropdown-item">
+                            <i data-lucide="pencil" class="icon"></i>
+                            <span>Gerenciar Tarefas</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="position: relative;">
+                    <button class="btn btn-icon btn-outline" data-toggle="dropdown" data-target="dropdown-settings">
+                        <i data-lucide="settings" class="icon"></i>
+                    </button>
+                    <div id="dropdown-settings" class="dropdown-menu hidden">
+                        <div class="dropdown-header">Configurações</div>
+                        <div class="dropdown-user-info">
+                            <p>{{ user.username }}</p>
+                            <span>{{ user.email|default:"Sem e-mail" }}</span>
+                        </div>
+                        <div class="dropdown-separator"></div>
+                        <button class="dropdown-item" disabled> <i data-lucide="moon" class="icon"></i>
+                            <span>Tema Escuro</span>
+                        </button>
+                        <form action="{% url 'logout' %}" method="post" style="width: 100%;">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item" style="width: 100%; text-align: left;">
                                 <i data-lucide="log-out" class="icon"></i>
                                 <span>Sair</span>
-                            </a>
-                        </div>
+                            </button>
+                        </form>
                     </div>
+                </div>
 
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-outline">Entrar</a>
-                    <a href="{% url 'cadastro' %}" class="btn btn-primary">Cadastrar</a>
+                <a href="{% url 'login' %}" class="btn btn-outline">Entrar</a>
+                <a href="{% url 'cadastro' %}" class="btn btn-primary">Cadastrar</a>
                 {% endif %}
             </div>
         </div>
@@ -75,4 +80,5 @@
 
     <script src="{% static 'gestao/js/main.js' %}"></script>
 </body>
+
 </html>
