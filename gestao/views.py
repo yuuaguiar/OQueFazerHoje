@@ -2,20 +2,28 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.utils import timezone
-from datetime import date
+from django.utils import timezone  # IMPORTANTE: Usar timezone
 from .models import Perfil, Comodo, Tarefa, HistoricoExecucao
 
 # --- Visão Principal ---
 
 @login_required
 def dashboard_view(request):
-    perfil = request.user.perfil
-    hoje = date.today()
+    try:
+        perfil = request.user.perfil
+    except Perfil.DoesNotExist:
+        from .models import Perfil
+        perfil = Perfil.objects.create(usuario=request.user)
 
+    # --- CORREÇÃO DE FUSO HORÁRIO ---
+    hoje = timezone.localdate() 
+    # --------------------------------
+
+    comodos = Comodo.objects.filter(usuario=request.user)
     todas_tarefas = Tarefa.objects.filter(comodo__usuario=request.user, ativa=True)
     
     tarefas_hoje = []
+    # Busca tarefas concluídas HOJE (localmente)
     tarefas_concluidas_hoje_ids = set(
         HistoricoExecucao.objects.filter(
             tarefa__in=todas_tarefas,
@@ -26,9 +34,13 @@ def dashboard_view(request):
     for t in todas_tarefas:
         vencida = True
         if t.data_ultima_execucao:
-            dias_passados = (hoje - t.data_ultima_execucao.date()).days
-            if dias_passados < t.intervalo_dias:
-                vencida = False
+            # Compara datas locais
+            data_ultima = timezone.localdate(t.data_ultima_execucao) if t.data_ultima_execucao else None
+            
+            if data_ultima:
+                dias_passados = (hoje - data_ultima).days
+                if dias_passados < t.intervalo_dias:
+                    vencida = False
         
         is_completed_today = t.id in tarefas_concluidas_hoje_ids
 
@@ -59,13 +71,19 @@ def dashboard_view(request):
 def concluir_tarefa(request, tarefa_id):
     if request.method == 'POST':
         tarefa = get_object_or_404(Tarefa, id=tarefa_id, comodo__usuario=request.user)
-        hoje = timezone.now().date()
+        
+        # --- CORREÇÃO: Usa data local para verificar se já existe ---
+        hoje = timezone.localdate()
+        # ----------------------------------------------------------
+
         exec_hoje = HistoricoExecucao.objects.filter(tarefa=tarefa, data_conclusao__date=hoje).first()
 
         if exec_hoje:
+            # Se encontrou registro com data de HOJE, deleta (Desmarca)
             exec_hoje.delete()
         else:
-            HistoricoExecucao.objects.create(tarefa=tarefa)
+            # Se não encontrou, cria (Marca) com data/hora atual
+            HistoricoExecucao.objects.create(tarefa=tarefa, data_conclusao=timezone.now())
             tarefa.data_ultima_execucao = timezone.now()
             tarefa.save()
 
@@ -76,9 +94,7 @@ def concluir_tarefa(request, tarefa_id):
 @login_required
 def configuracoes_view(request):
     comodos = Comodo.objects.filter(usuario=request.user)
-    context = {
-        'comodos': comodos
-    }
+    context = { 'comodos': comodos }
     return render(request, 'gestao/configuracoes.html', context)
 
 @login_required
@@ -88,7 +104,7 @@ def add_comodo(request):
         icone = request.POST.get('icone', 'default.png')
         if nome:
             Comodo.objects.create(usuario=request.user, nome=nome, icone=icone)
-    return redirect('configuracoes')
+    return redirect('dashboard') 
 
 @login_required
 def delete_comodo(request, comodo_id):
@@ -106,12 +122,8 @@ def add_tarefa(request):
         
         comodo = get_object_or_404(Comodo, id=comodo_id, usuario=request.user)
         if titulo and comodo:
-            Tarefa.objects.create(
-                comodo=comodo,
-                titulo=titulo,
-                intervalo_dias=int(intervalo_dias)
-            )
-    return redirect('configuracoes')
+            Tarefa.objects.create(comodo=comodo, titulo=titulo, intervalo_dias=int(intervalo_dias))
+    return redirect('dashboard') 
 
 # --- Visões de Autenticação ---
 

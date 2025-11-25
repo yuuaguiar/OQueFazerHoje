@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="{% static 'gestao/css/main.css' %}" />
 
-    <script src="https://unpkg.com/lucide-react@0.395.0/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="bg-background">
@@ -52,9 +52,9 @@
                             <p>{{ user.username }}</p>
                             <span>{{ user.email|default:"Sem e-mail" }}</span>
                         </div>
-                        <div class="dropdown-separator"></div>
-                        <button class="dropdown-item" disabled> <i data-lucide="moon" class="icon"></i>
-                            <span>Tema Escuro</span>
+                        <button type="button" class="dropdown-item" onclick="window.toggleTheme()">
+                            <i data-lucide="moon" class="icon"></i>
+                            <span>Alternar Tema</span>
                         </button>
                         <form action="{% url 'logout' %}" method="post" style="width: 100%;">
                             {% csrf_token %}
