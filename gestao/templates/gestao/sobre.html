@@ -1,0 +1,78 @@
+{% extends 'gestao/base.html' %}
+{% load static %}
+
+{% block title %}Sobre a Error404{% endblock %}
+
+{% block content %}
+<main style="max-width: 700px; margin: 0 auto;">
+
+    <div class="card" style="padding: 3rem 2rem;">
+        
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div style="
+                background-color: hsl(var(--primary) / 0.1); 
+                width: 80px; height: 80px; 
+                border-radius: 24px; /* Borda mais moderna (squircle) */
+                display: flex; align-items: center; justify-content: center; 
+                margin: 0 auto 1.5rem auto;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            ">
+                <i data-lucide="monitor-x" style="width: 40px; height: 40px; color: hsl(var(--primary));"></i>
+            </div>
+            
+            <h1 class="header-title" style="font-size: 2rem; margin-bottom: 0.5rem;">Error404</h1>
+            <p style="color: hsl(var(--muted-foreground)); font-size: 1.1rem;">Organização não precisa ser um mistério.</p>
+        </div>
+
+        <div style="line-height: 1.8; font-size: 1.05rem; color: hsl(var(--foreground)); text-align: left;">
+            
+            <p style="margin-bottom: 1.5rem;">
+                Na <strong>Error404</strong>, acreditamos que organização não precisa ser um mistério (nem um erro). Criamos um sistema inteligente para te ajudar a manter a casa em ordem – da faxina pesada à arrumação do dia a dia – tudo com mais <strong style="color: hsl(var(--primary));">leveza e praticidade</strong>.
+            </p>
+            
+            <p style="margin-bottom: 1.5rem;">
+                Apesar do nome lembrar páginas perdidas, nossa missão é justamente te ajudar a <strong>encontrar o controle da rotina doméstica</strong>. Com uma plataforma simples, visual e intuitiva, te ajudamos a planejar tarefas, distribuir responsabilidades e manter o lar funcionando como um verdadeiro time.
+            </p>
+            
+            <p style="margin-bottom: 2.5rem; border-left: 4px solid hsl(var(--primary)); padding-left: 1rem; font-style: italic; color: hsl(var(--muted-foreground));">
+                "Somos apaixonados por tecnologia que simplifica a vida, e por soluções que trazem aquela sensação boa de casa limpa e organizada. E se sobrar tempo depois... que tal errar por aí, mas nunca na faxina?"
+            </p>
+        </div>
+
+        <div style="height: 1px; background-color: hsl(var(--border)); margin: 0 0 2.5rem 0;"></div>
+
+        <div style="text-align: center;">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem;">Precisa de ajuda?</h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+                <a href="https://wa.me/5511999999999" target="_blank" class="btn btn-primary" style="text-decoration: none; padding: 0.75rem 2rem; border-radius: 50px; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 14px 0 rgba(0,118,255,0.15);">
+                    <i data-lucide="message-circle" style="width: 20px;"></i>
+                    Falar com Suporte
+                </a>
+                
+                <div style="display: flex; gap: 2rem; margin-top: 1rem; font-size: 0.9rem; color: hsl(var(--muted-foreground));">
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <i data-lucide="mail" style="width: 16px;"></i> contato@error404.com
+                    </span>
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <i data-lucide="map-pin" style="width: 16px;"></i> São Paulo, SP
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{% url 'dashboard' %}" style="color: hsl(var(--muted-foreground)); text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;">
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar ao Painel
+        </a>
+    </div>
+
+</main>
+
+<script>
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}

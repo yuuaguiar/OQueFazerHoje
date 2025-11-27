@@ -174,3 +174,6 @@ def pagina_cadastro(request):
         form = CadastroUsuarioForm()
     
     return render(request, 'gestao/cadastro.html', {'form': form})
+
+def sobre_view(request):
+    return render(request, 'gestao/sobre.html')

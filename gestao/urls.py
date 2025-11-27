@@ -24,4 +24,5 @@ urlpatterns = [
     path('configuracoes/tarefa/<int:tarefa_id>/toggle/', views.toggle_tarefa_ativa, name='toggle_tarefa'),
 
     path('configuracoes/tarefa/<int:tarefa_id>/deletar/', views.delete_tarefa, name='delete_tarefa'),
+    path('sobre/', views.sobre_view, name='sobre'),
 ]

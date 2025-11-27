@@ -52,6 +52,15 @@
                             <p>{{ user.username }}</p>
                             <span>{{ user.email|default:"Sem e-mail" }}</span>
                         </div>
+                        
+                        <a href="{% url 'sobre' %}" class="dropdown-item">
+                            <i data-lucide="info" class="icon"></i>
+                            <span>Sobre a Error404</span>
+                        </a>
+                        
+                        <div class="dropdown-separator"></div>
+
+
                         <button type="button" class="dropdown-item" onclick="window.toggleTheme()">
                             <i data-lucide="moon" class="icon"></i>
                             <span>Alternar Tema</span>
