@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
+from django.utils import timezone 
+from datetime import timedelta
 
 # --- MODELOS DE TEMPLATE (PARA ONBOARDING) ---
 
@@ -44,13 +45,37 @@ class Tarefa(models.Model):
     titulo = models.CharField(max_length=200)
     intervalo_dias = models.IntegerField(default=1) # Diário = 1, Semanal = 7, etc.
     data_ultima_execucao = models.DateTimeField(null=True, blank=True)
-    ativa = models.BooleanField(default=True) # Para "soft delete"
+    ativa = models.BooleanField(default=True) 
 
     def __str__(self):
         return self.titulo
 
+    # --- AQUI ESTÁ A MÁGICA QUE FALTAVA ---
+    @property
+    def dias_restantes(self):
+        # Se nunca foi feita, faltam 0 dias (é pra hoje)
+        if not self.data_ultima_execucao:
+            return 0
+        
+        hoje = timezone.localdate()
+        # Converte a data de execução para data local
+        ultima = timezone.localdate(self.data_ultima_execucao)
+        
+        dias_passados = (hoje - ultima).days
+        restante = self.intervalo_dias - dias_passados
+        
+        # Retorna o maior valor entre 0 e o restante (para não dar negativo)
+        return max(0, restante)
+
+    @property
+    def proxima_data(self):
+        if not self.data_ultima_execucao:
+            return timezone.localdate()
+        
+        ultima = timezone.localdate(self.data_ultima_execucao)
+        return ultima + timedelta(days=self.intervalo_dias)
+
 class HistoricoExecucao(models.Model):
-    # Deleta o histórico se a tarefa for deletada
     tarefa = models.ForeignKey(Tarefa, on_delete=models.CASCADE, related_name='historico')
     data_conclusao = models.DateTimeField(default=timezone.now)
 

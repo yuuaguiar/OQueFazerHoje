@@ -5,8 +5,10 @@
   /* Tema Claro (Padrão) */
   --background: 210 20% 98%;
   --foreground: 222 47% 11%;
+  
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
+  
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
   
@@ -45,14 +47,13 @@ html.dark {
   --accent: 38 92% 60%;
   --accent-foreground: 222 47% 11%;
   
-  /* Clareamos o muted e border para aparecerem no fundo escuro */
   --muted: 217 33% 25%; 
   --muted-foreground: 215 20% 75%;
   
   --destructive: 0 62% 30%;
   --destructive-foreground: 0 0% 100%;
   
-  --border: 217 33% 30%; /* Borda mais clara */
+  --border: 217 33% 30%;
   --input: 217 33% 30%;
   --ring: 160 84% 39%;
 }
@@ -75,6 +76,11 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+/* Centraliza telas de login automaticamente se tiver auth-container */
+body:has(.auth-container) main {
+    display: flex; justify-content: center; min-height: 80vh;
+}
+
 main {
   max-width: 800px;
   margin: 0 auto;
@@ -87,7 +93,7 @@ a {
 }
 
 /* ---------------------------------- */
-/* 3. COMPONENTES                     */
+/* 3. COMPONENTES GERAIS              */
 /* ---------------------------------- */
 
 .header {
@@ -103,7 +109,6 @@ a {
   font-size: 1.5rem; font-weight: 700; color: hsl(var(--primary));
 }
 
-/* Botões */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: var(--radius); font-size: 0.875rem; font-weight: 500;
@@ -116,9 +121,12 @@ a {
 .btn-outline {
   border-color: hsl(var(--input)); background-color: hsl(var(--card)); color: hsl(var(--foreground));
 }
-.btn-icon { width: 2.5rem; height: 2.5rem; padding: 0; }
+.btn-icon { 
+    width: 2.5rem; height: 2.5rem; padding: 0; 
+    display:flex; align-items:center; justify-content:center; 
+    border-radius: 0.375rem; cursor: pointer; border: none;
+}
 
-/* Forms */
 .form-input, .form-select {
   display: flex; height: 2.5rem; width: 100%;
   border-radius: var(--radius); border: 1px solid hsl(var(--input));
@@ -130,14 +138,38 @@ a {
   margin-bottom: 0.5rem; color: hsl(var(--foreground));
 }
 
-/* Cards */
 .card {
   border-radius: var(--radius); border: 1px solid hsl(var(--border));
   background-color: hsl(var(--card)); color: hsl(var(--card-foreground));
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); padding: 1.5rem; margin-bottom: 2rem;
 }
 
-/* Gamification */
+/* ---------------------------------- */
+/* 4. LOGIN & CADASTRO                */
+/* ---------------------------------- */
+.auth-container {
+  width: 100%; max-width: 400px; margin-top: 2rem; padding: 2.5rem;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border)); border-radius: var(--radius);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+.auth-container h2 {
+  font-size: 1.75rem; font-weight: 700; text-align: center;
+  margin-bottom: 2rem; color: hsl(var(--primary));
+}
+.auth-form .form-group { margin-bottom: 1.25rem; }
+.auth-form input {
+  width: 100%; height: 3rem; padding: 0 1rem;
+  background-color: hsl(var(--background)); border: 1px solid hsl(var(--input));
+  border-radius: var(--radius); color: hsl(var(--foreground));
+}
+.auth-form .btn { width: 100%; height: 3rem; margin-top: 1.5rem; font-size: 1rem; font-weight: 600; }
+.auth-link { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: hsl(var(--muted-foreground)); }
+
+
+/* ---------------------------------- */
+/* 5. DASHBOARD & TAREFAS             */
+/* ---------------------------------- */
 .gamification-grid { display: flex; align-items: center; gap: 1.5rem; }
 .progress-bar-area { flex: 1; }
 .progress-bar-track {
@@ -158,14 +190,12 @@ a {
 }
 .streak-value .icon { color: #f97316; width: 2rem; height: 2rem; }
 
-/* Tasks */
 .tasks-title {
   font-size: 1.5rem; font-weight: 700; color: hsl(var(--foreground));
   margin-bottom: 1.5rem;
 }
 .tasks-grid { display: grid; gap: 0.75rem; }
 
-/* Task Card */
 .task-card {
   width: 100%; text-align: left; display: block;
   border-radius: var(--radius); padding: 1rem;
@@ -178,40 +208,27 @@ a {
 .task-card-room { font-size: 0.875rem; color: hsl(var(--muted-foreground)); }
 .task-card-icon { color: hsl(var(--primary-foreground)); width: 1.5rem; height: 1.5rem; }
 
-/* Estados Task Card */
 .task-card[data-completed="true"] {
   background-color: hsl(var(--primary)); border-color: hsl(var(--primary));
 }
 .task-card[data-completed="true"] .task-card-title,
 .task-card[data-completed="true"] .task-card-room { color: hsl(var(--primary-foreground)); }
-
 .task-card[data-completed="true"]:hover {
     background-color: hsl(var(--destructive)); border-color: hsl(var(--destructive));
 }
 .task-card[data-completed="true"]:hover .task-card-icon { opacity: 0.5; }
 
-/* === CORREÇÃO DOS ELEMENTOS SUMIDOS === */
-
-/* Ad Block */
 .ad-block { margin-top: 2rem; margin-bottom: 1.5rem; }
-.ad-block-label {
-  font-size: 0.75rem; color: hsl(var(--muted-foreground));
-  text-align: center; margin-bottom: 0.5rem;
-}
+.ad-block-label { font-size: 0.75rem; color: hsl(var(--muted-foreground)); text-align: center; margin-bottom: 0.5rem; }
 .ad-block-box {
-  border: 2px dashed hsl(var(--border));
-  border-radius: var(--radius);
-  /* Sintaxe de transparência moderna e compatível */
+  border: 2px dashed hsl(var(--border)); border-radius: var(--radius);
   background-color: hsl(var(--muted) / 0.3); 
-  display: flex; align-items: center; justify-content: center;
-  height: 8rem;
+  display: flex; align-items: center; justify-content: center; height: 8rem;
 }
 .ad-block-box p { font-size: 0.875rem; color: hsl(var(--muted-foreground)); }
 
-/* Completion Message */
 .completion-message {
   border: 1px solid hsl(var(--primary));
-  /* Sintaxe de transparência moderna e compatível */
   background-color: hsl(var(--primary) / 0.1);
   border-radius: var(--radius); padding: 1.5rem; text-align: center;
   max-width: 400px; margin: 4rem auto;
@@ -220,9 +237,14 @@ a {
 .completion-message-title { font-size: 1.25rem; font-weight: 700; color: hsl(var(--primary)); margin-bottom: 0.5rem; }
 .completion-message-text { color: hsl(var(--muted-foreground)); }
 
-/* Dropdowns e Modals */
+/* ---------------------------------- */
+/* 6. CONFIGURAÇÕES & MODALS          */
+/* ---------------------------------- */
+
+/* Ocultar elementos (IMPORTANTE) */
 .hidden { display: none !important; }
 
+/* Menus Flutuantes */
 .dropdown-menu {
   position: absolute; top: 100%; right: 0; margin-top: 0.5rem;
   width: 200px; background-color: hsl(var(--card));
@@ -243,6 +265,7 @@ a {
 .dropdown-item:hover { background-color: hsl(var(--muted)); }
 .dropdown-item .icon { color: hsl(var(--foreground)); width: 1.2rem; height: 1.2rem; }
 
+/* Modals (Janelas) */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 100;
   display: flex; align-items: center; justify-content: center;
@@ -250,87 +273,76 @@ a {
 }
 .modal-content {
   background-color: hsl(var(--card)); color: hsl(var(--foreground));
-  border-radius: var(--radius); padding: 1.5rem; width: 90%; max-width: 450px;
+  border-radius: var(--radius); padding: 1.5rem; 
+  width: 90%; max-width: 450px;
+  max-height: 90vh; overflow-y: auto;
 }
 .modal-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
 .modal-title { font-weight: 700; color: hsl(var(--foreground)); }
 .modal-close-btn { background: none; border: none; cursor: pointer; color: hsl(var(--foreground)); }
 .modal-footer { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
-.config-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
 
-/* --- PÁGINA DE CONFIGURAÇÕES --- */
-
+/* Painel de Configurações */
 .config-grid {
-  display: grid;
-  gap: 2rem;
-  max-width: 600px; /* Limita a largura para ficar mais elegante */
-  margin: 0 auto;
+  display: grid; gap: 2rem; margin: 0 auto;
 }
-
 .config-card {
-  background-color: hsl(var(--card));
-  border-radius: var(--radius);
-  padding: 2rem; /* Mais espaçamento interno */
-  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card)); border-radius: var(--radius);
+  padding: 1.5rem; border: 1px solid hsl(var(--border));
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
 .config-card-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: hsl(var(--primary)); /* Título verde para combinar */
-  border-bottom: 1px solid hsl(var(--border));
-  padding-bottom: 1rem;
+  font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;
+  color: hsl(var(--primary)); border-bottom: 1px solid hsl(var(--border));
+  padding-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;
 }
-
-/* Lista de Cômodos */
-.config-list {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
+.config-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .config-list-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Joga o texto pra esq e icone pra dir */
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; border-radius: var(--radius);
+  border: 1px solid hsl(var(--border)); background-color: hsl(var(--muted) / 0.3);
+}
+.config-list-item form { display: flex; margin: 0; } 
+
+.config-form-grid { 
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; 
+}
+
+/* --- RESPONSIVIDADE DA TABELA (O Pulo do Gato) --- */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Permite rolagem lateral */
+  -webkit-overflow-scrolling: touch; 
+  margin-bottom: 1rem;
   border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--muted) / 0.3);
-  transition: background-color 0.2s;
+  border-radius: var(--radius);
 }
 
-.config-list-item:hover {
-  background-color: hsl(var(--muted) / 0.5);
+/* Força a tabela a ter uma largura mínima para não quebrar */
+.table-wrapper table {
+  min-width: 800px !important;
 }
 
-/* CORREÇÃO DO ÍCONE DE LIXEIRA CAINDO */
-.config-list-item form {
-  display: flex;
-  margin: 0;
-}
 
-.config-list-item span {
-  font-weight: 500;
-  color: hsl(var(--foreground));
-}
+/* --- MEDIA QUERIES (RESPONSIVIDADE MOBILE) --- */
+@media (max-width: 640px) {
+    main { padding: 1rem 0.5rem; }
 
-.config-list-item .btn-icon {
-  color: hsl(var(--destructive));
-  height: 2rem; width: 2rem;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 0.375rem;
-}
+    .auth-container { padding: 1.5rem; margin-top: 1rem; }
 
-.config-list-item .btn-icon:hover {
-  background-color: hsl(var(--destructive) / 0.1);
-}
+    .gamification-grid {
+        flex-direction: column;
+        align-items: stretch; gap: 1rem;
+    }
+    
+    .streak-display {
+        border-left: none; border-top: 1px solid hsl(var(--border));
+        padding-left: 0; padding-top: 1rem; 
+        flex-direction: row; justify-content: center; gap: 1rem;
+    }
+    
+    .config-form-grid { grid-template-columns: 1fr; }
 
-/* Formulários Internos */
-.config-form {
-  display: flex;
-  gap: 0.75rem;
+    /* Reduz padding dos cartões no celular */
+    .config-card { padding: 1rem; }
 }

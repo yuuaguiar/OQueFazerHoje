@@ -7,20 +7,14 @@
 <main class="config-grid">
     
     <div class="config-card">
-        <h2 class="config-card-title">
-            <i data-lucide="home" class="icon" style="display:inline; vertical-align:middle; margin-right:8px; width:20px;"></i>
-            Gerenciar Cômodos
-        </h2>
-        
-        <form action="{% url 'add_comodo' %}" method="POST" class="config-form">
-            {% csrf_token %}
-            <input type="text" name="nome" placeholder="Nome do novo cômodo..." class="form-input" style="flex:1;" required>
-            <input type="hidden" name="icone" value="default.png">
-            <button type="submit" class="btn btn-primary">
-                <i data-lucide="plus" class="icon" style="width:16px; margin-right:4px;"></i>
-                Adicionar
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 class="config-card-title" style="border:none; padding:0; margin:0;">
+                <i data-lucide="home" class="icon"></i> Cômodos
+            </h2>
+            <button class="btn btn-primary" data-toggle="modal" data-target="modal-add-comodo" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                <i data-lucide="plus" class="icon" style="width:14px; margin-right:4px;"></i> Novo
             </button>
-        </form>
+        </div>
 
         <div class="config-list">
             {% for comodo in comodos %}
@@ -28,14 +22,14 @@
                 <span>{{ comodo.nome }}</span>
                 <form action="{% url 'delete_comodo' comodo.id %}" method="POST">
                     {% csrf_token %}
-                    <button type="submit" class="btn-icon" aria-label="Deletar" title="Excluir Cômodo">
+                    <button type="submit" class="btn-icon" aria-label="Deletar" title="Excluir">
                         <i data-lucide="trash-2" class="icon"></i>
                     </button>
                 </form>
             </div>
             {% empty %}
             <div style="text-align: center; padding: 1rem; color: hsl(var(--muted-foreground));">
-                Nenhum cômodo cadastrado.
+                Nenhum cômodo.
             </div>
             {% endfor %}
         </div>
@@ -43,42 +37,158 @@
 
     <div class="config-card">
         <h2 class="config-card-title">
-            <i data-lucide="check-square" class="icon" style="display:inline; vertical-align:middle; margin-right:8px; width:20px;"></i>
-            Criar Nova Tarefa
+            <i data-lucide="check-square" class="icon"></i> Tarefas
         </h2>
-        
-        <form action="{% url 'add_tarefa' %}" method="POST" style="display: grid; gap: 1.25rem;">
-            {% csrf_token %}
-            
-            <div>
-                <label class="form-label">Nome da Tarefa</label>
-                <input type="text" name="titulo" placeholder="Ex: Lavar a louça" class="form-input" required>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div>
-                    <label class="form-label">Cômodo</label>
-                    <select name="comodo_id" class="form-select" required>
-                        <option value="" disabled selected>Selecione...</option>
-                        {% for comodo in comodos %}
-                        <option value="{{ comodo.id }}">{{ comodo.nome }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label class="form-label">Frequência (dias)</label>
-                    <input type="number" name="intervalo_dias" value="1" min="1" class="form-input" required>
-                </div>
-            </div>
-            
-            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                Confirmar e Criar Tarefa
-            </button>
-        </form>
+        <p style="color: hsl(var(--muted-foreground)); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            Crie tarefas personalizadas para sua rotina.
+        </p>
+        <button class="btn btn-primary" style="width: 100%;" data-toggle="modal" data-target="modal-add-tarefa">
+            <i data-lucide="plus-circle" class="icon" style="width:18px; margin-right:8px;"></i>
+            Criar Nova Tarefa
+        </button>
     </div>
+
+    <div class="config-card" style="grid-column: 1 / -1;"> 
+        <h2 class="config-card-title">
+            <i data-lucide="list-todo" class="icon"></i> Painel de Controle
+        </h2>
+
+        <div class="table-wrapper">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid hsl(var(--border)); text-align: left; color: hsl(var(--muted-foreground));">
+                        <th style="padding: 0.75rem; width: 50px;">Status</th>
+                        <th style="padding: 0.75rem;">Tarefa</th>
+                        <th style="padding: 0.75rem;">Cômodo</th>
+                        <th style="padding: 0.75rem;">Freq.</th>
+                        <th style="padding: 0.75rem;">Próxima</th>
+                        <th style="padding: 0.75rem; text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tarefa in tarefas %}
+                    <tr style="border-bottom: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); {% if not tarefa.ativa %} opacity: 0.5; {% endif %}">
+                        
+                        <td style="padding: 0.75rem; text-align: center;">
+                            <form action="{% url 'toggle_tarefa' tarefa.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" style="background:none; border:none; cursor:pointer;">
+                                    {% if tarefa.ativa %}
+                                        <i data-lucide="eye" style="width:18px; color:hsl(var(--primary));"></i>
+                                    {% else %}
+                                        <i data-lucide="eye-off" style="width:18px; color:hsl(var(--muted-foreground));"></i>
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </td>
+
+                        <td style="padding: 0.75rem; font-weight: 600;">{{ tarefa.titulo }}</td>
+                        
+                        <td style="padding: 0.75rem;">{{ tarefa.comodo.nome }}</td>
+
+                        <td style="padding: 0.75rem;">{{ tarefa.intervalo_dias }}d</td>
+
+                        <td style="padding: 0.75rem;">
+                            {% if not tarefa.ativa %} - {% elif tarefa.dias_restantes == 0 %}
+                                <span style="color: hsl(var(--primary)); font-weight:bold;">Hoje!</span>
+                            {% else %}
+                                {{ tarefa.proxima_data|date:"d/m" }}
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 0.75rem; text-align: right;">
+                            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                                {% if tarefa.dias_restantes > 0 and tarefa.ativa %}
+                                <form action="{% url 'antecipar_tarefa' tarefa.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-icon" style="width:32px; height:32px; background-color:hsl(var(--accent)); color:hsl(var(--accent-foreground)); border-radius:6px;">
+                                        <i data-lucide="fast-forward" style="width:16px;"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <form action="{% url 'delete_tarefa' tarefa.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-icon" style="width:32px; height:32px; background-color:hsl(var(--destructive)); color:hsl(var(--destructive-foreground)); border-radius:6px;">
+                                        <i data-lucide="trash" style="width:16px;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" style="padding:2rem; text-align:center;">Nenhuma tarefa.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modal-add-comodo" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Novo Cômodo</h3>
+                <button type="button" class="modal-close-btn" onclick="fecharModal('modal-add-comodo')"><i data-lucide="x"></i></button>
+            </div>
+            <form action="{% url 'add_comodo' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="text" name="nome" placeholder="Nome..." class="form-input" required>
+                    <input type="hidden" name="icone" value="default.png">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('modal-add-comodo')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-add-tarefa" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Nova Tarefa</h3>
+                <button type="button" class="modal-close-btn" onclick="fecharModal('modal-add-tarefa')"><i data-lucide="x"></i></button>
+            </div>
+            <form action="{% url 'add_tarefa' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="titulo" placeholder="Ex: Varrer..." class="form-input" required>
+                    
+                    <div class="config-form-grid">
+                        <div>
+                            <label class="form-label">Cômodo</label>
+                            <select name="comodo_id" class="form-select" required>
+                                {% for comodo in comodos %}
+                                <option value="{{ comodo.id }}">{{ comodo.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Dias</label>
+                            <input type="number" name="intervalo_dias" value="1" min="1" class="form-input" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('modal-add-tarefa')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </main>
 
 <script>
+    function fecharModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    }
+    
     if (typeof lucide !== "undefined") {
         lucide.createIcons();
     }

@@ -10,14 +10,41 @@
             <h2 class="tasks-title">Bem-vindo(a)!</h2>
             <p>Faça login ou crie uma conta para organizar suas tarefas diárias.</p>
         </div>
+
     {% elif all_completed %}
         <div class="completion-message">
             <i data-lucide="sparkles" class="icon"></i>
-            <h3 class="completion-message-title">Tudo limpo por hoje! ✨</h3>
+            <h3 class="completion-message-title">Tudo limpo por hoje!</h3>
             <p class="completion-message-text">
                 Parabéns! Você completou todas as tarefas de hoje.
             </p>
+            
+            <button onclick="toggleRevisao()" class="btn btn-outline" style="margin-top: 1.5rem; border-color: hsl(var(--primary)); color: hsl(var(--primary));">
+                <i data-lucide="list-checks" style="width: 16px; margin-right: 8px; display: inline-block; vertical-align: middle;"></i>
+                Revisar Tarefas Concluídas
+            </button>
         </div>
+
+        <div id="lista-revisao" class="hidden" style="margin-top: 2rem;">
+            <h3 class="tasks-title" style="font-size: 1.1rem; text-align: center;">Clique para desmarcar</h3>
+            <div class="tasks-grid">
+                {% for task in tarefas_hoje %}
+                    <form action="{% url 'concluir_tarefa' task.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="task-card" data-completed="true">
+                            <div class="task-card-content">
+                                <div>
+                                    <h3 class="task-card-title">{{ task.titulo }}</h3>
+                                    <p class="task-card-room">Cômodo: {{ task.comodo.nome }}</p>
+                                </div>
+                                <i data-lucide="check" class="task-card-icon"></i>
+                            </div>
+                        </button>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+
     {% else %}
         <div class="card gamification-grid">
             <div class="progress-bar-area">
@@ -43,9 +70,13 @@
             <h2 class="tasks-title">O Que Fazer Hoje</h2>
             <div class="tasks-grid">
                 {% for task in tarefas_hoje %}
-                    <form action="{% url 'concluir_tarefa' task.id %}" method="POST">
+                    <form id="form-task-{{ task.id }}" action="{% url 'concluir_tarefa' task.id %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit" class="task-card" data-completed="{{ task.is_completed_today|yesno:'true,false' }}">
+                        <button type="submit" 
+                                class="task-card js-task-btn" 
+                                data-id="{{ task.id }}"
+                                data-completed="{{ task.is_completed_today|yesno:'true,false' }}"
+                                onclick="verificarConclusao(event, '{{ task.id }}', '{{ task.is_completed_today|yesno:'true,false' }}')">
                             <div class="task-card-content">
                                 <div>
                                     <h3 class="task-card-title">{{ task.titulo }}</h3>
@@ -136,18 +167,82 @@
         </div>
     </div>
 
+    <div id="modal-confirm-finish" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Quase lá!</h3>
+                <button type="button" class="modal-close-btn" onclick="fecharModal('modal-confirm-finish')">
+                    <i data-lucide="x" class="icon"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Você realmente concluiu todas as tarefas de hoje?</p>
+                <p style="font-size: 0.9rem; color: hsl(var(--muted-foreground));">Ao confirmar, sua sequência diária aumentará!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="fecharModal('modal-confirm-finish')">Ainda não</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarConclusao()">Sim, completei tudo!</button>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <script>
+    let tarefaPendenteId = null;
+
+    // Função para mostrar a lista oculta na tela de sucesso
+    function toggleRevisao() {
+        const lista = document.getElementById('lista-revisao');
+        if (lista.classList.contains('hidden')) {
+            lista.classList.remove('hidden');
+        } else {
+            lista.classList.add('hidden');
+        }
+    }
+
+    function verificarConclusao(event, id, isCompletedStr) {
+        const isCompleted = isCompletedStr === 'true';
+
+        // Se já está concluída, é desmarcar. Permite.
+        if (isCompleted) {
+            return true; 
+        }
+
+        // Conta quantas tarefas faltam ser marcadas (que estão brancas)
+        const tarefasPendentes = document.querySelectorAll('.js-task-btn[data-completed="false"]').length;
+
+        // Se for a última, pede confirmação
+        if (tarefasPendentes === 1) {
+            event.preventDefault();
+            tarefaPendenteId = id;
+            const modal = document.getElementById('modal-confirm-finish');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            return false;
+        }
+        return true;
+    }
+
+    function confirmarConclusao() {
+        if (tarefaPendenteId) {
+            const form = document.getElementById('form-task-' + tarefaPendenteId);
+            if (form) {
+                form.submit();
+            }
+        }
+    }
+
     function fecharModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        } else {
-            console.error("Modal não encontrado: " + modalId);
         }
     }
+    
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
 </script>
-
 {% endblock %}
